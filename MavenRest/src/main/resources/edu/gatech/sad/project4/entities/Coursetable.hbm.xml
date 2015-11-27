@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 26, 2015 12:46:12 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="edu.gatech.sad.project4.entities.Coursetable" table="coursetable" catalog="mydb" optimistic-lock="version">
+        <id name="courseCode" type="string">
+            <column name="courseCode" length="45" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="taWeighting" type="int">
+            <column name="taWeighting" not-null="true" />
+        </property>
+        <property name="enrollmentLimit" type="int">
+            <column name="enrollmentLimit" not-null="true" />
+        </property>
+        <property name="prereq" type="string">
+            <column name="prereq" />
+        </property>
+        <property name="offered" type="boolean">
+            <column name="offered" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

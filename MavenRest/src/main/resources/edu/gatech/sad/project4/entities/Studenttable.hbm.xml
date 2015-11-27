@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 26, 2015 12:46:12 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="edu.gatech.sad.project4.entities.Studenttable" table="studenttable" catalog="mydb" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="45" not-null="true" />
+        </property>
+        <property name="ta" type="boolean">
+            <column name="ta" not-null="true" />
+        </property>
+        <property name="creditHoursCompleted" type="int">
+            <column name="creditHoursCompleted" not-null="true" />
+        </property>
+        <property name="takenCourses" type="string">
+            <column name="takenCourses" />
+        </property>
+    </class>
+</hibernate-mapping>

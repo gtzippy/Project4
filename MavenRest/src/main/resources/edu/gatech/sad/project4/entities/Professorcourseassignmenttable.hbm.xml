@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 26, 2015 12:46:12 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="edu.gatech.sad.project4.entities.Professorcourseassignmenttable" table="professorcourseassignmenttable" catalog="mydb" optimistic-lock="version">
+        <composite-id name="id" class="edu.gatech.sad.project4.entities.ProfessorcourseassignmenttableId">
+            <key-property name="processingStatusId" type="int">
+                <column name="processingStatusId" />
+            </key-property>
+            <key-property name="professorId" type="int">
+                <column name="professorId" />
+            </key-property>
+        </composite-id>
+        <property name="courseCode" type="string">
+            <column name="courseCode" />
+        </property>
+    </class>
+</hibernate-mapping>

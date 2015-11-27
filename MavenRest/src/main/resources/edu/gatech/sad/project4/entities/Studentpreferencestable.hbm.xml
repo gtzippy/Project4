@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 26, 2015 12:46:12 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="edu.gatech.sad.project4.entities.Studentpreferencestable" table="studentpreferencestable" catalog="mydb" optimistic-lock="version">
+        <id name="preferenceId" type="java.lang.Integer">
+            <column name="preferenceId" />
+            <generator class="identity" />
+        </id>
+        <property name="date" type="timestamp">
+            <column name="date" length="19" not-null="true" />
+        </property>
+        <property name="studentId" type="int">
+            <column name="studentId" not-null="true" />
+        </property>
+        <property name="courses" type="string">
+            <column name="courses" not-null="true" />
+        </property>
+        <property name="numCoursesDesired" type="int">
+            <column name="numCoursesDesired" not-null="true" />
+        </property>
+        <property name="processingStatusId" type="java.lang.Integer">
+            <column name="processingStatusId" />
+        </property>
+    </class>
+</hibernate-mapping>
