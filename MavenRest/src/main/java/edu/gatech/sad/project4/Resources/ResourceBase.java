@@ -6,7 +6,8 @@
 package edu.gatech.sad.project4.Resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.ws.rs.core.Response;
+
+import edu.gatech.sad.project4.InteractionLayer;
 
 /**
  *
@@ -14,8 +15,13 @@ import javax.ws.rs.core.Response;
  */
 public abstract class ResourceBase {
     public static ObjectMapper mapper;
+    public static InteractionLayer iLayer;
     
     public static void setObjectMapper(ObjectMapper mapper){
         ResourceBase.mapper = mapper;
+    }
+    
+    public static void setInteractionLayer(InteractionLayer iLayer){
+    	ResourceBase.iLayer = iLayer;
     }
 }
