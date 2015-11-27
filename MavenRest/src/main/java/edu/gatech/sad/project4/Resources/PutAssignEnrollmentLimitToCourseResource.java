@@ -47,7 +47,6 @@ public class PutAssignEnrollmentLimitToCourseResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("enrollmentLimit") int enrollmentLimit, @PathParam("courseCode") String courseCode) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.assignEnrollmentLimitToCourse(enrollmentLimit, courseCode);
             return Response.ok().build();
         } catch (Throwable ex) {

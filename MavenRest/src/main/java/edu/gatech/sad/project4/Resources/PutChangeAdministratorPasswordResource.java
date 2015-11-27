@@ -45,7 +45,6 @@ public class PutChangeAdministratorPasswordResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("administratorId") int administratorId, @PathParam("newPassword") String newPassword) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.changeAdministratorPassword(administratorId, newPassword);
             return Response.ok().build();
         } catch (Throwable ex) {

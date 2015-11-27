@@ -45,7 +45,6 @@ public class PutChangeStudentPreferenceNumCoursesDesiredResource extends Resourc
     @Path("{studentId}/{numCoursesDesired}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("studentId") int studentId, @PathParam("numCoursesDesired") int numCoursesDesired) {
-        InteractionLayer iLayer = InteractionLayer.Instance();
         iLayer.changeStudentPreferenceNumCoursesDesired(12, studentId);
         return Response.accepted().build();
         //throw new UnsupportedOperationException();

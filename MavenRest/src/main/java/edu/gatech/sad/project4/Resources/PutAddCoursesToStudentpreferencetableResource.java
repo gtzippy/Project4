@@ -42,7 +42,6 @@ public class PutAddCoursesToStudentpreferencetableResource extends ResourceBase{
     @Path("{courseCodes}/{preferenceId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("preferenceId") int preferenceId) {
-        InteractionLayer iLayer = InteractionLayer.Instance();
         iLayer.addCoursesToStudentpreferencetable(courseCodes, preferenceId);
         return Response.ok().build();
     }

@@ -48,7 +48,6 @@ public class GetAllTasForCourseResource extends ResourceBase {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{courseCode}")
     public Response getJson(@PathParam("courseCode") String courseCode) {
-        InteractionLayer iLayer = InteractionLayer.Instance();
         try {
             List<Integer> tas = iLayer.getAllTasForCourse(courseCode);
             return Response.ok(mapper.writeValueAsString(tas)).build();

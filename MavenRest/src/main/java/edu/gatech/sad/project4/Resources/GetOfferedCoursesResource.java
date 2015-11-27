@@ -45,7 +45,6 @@ public class GetOfferedCoursesResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson() {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             List<String> ocs = iLayer.getOfferedCourses();
             return Response.ok(mapper.writeValueAsString(ocs)).build();
         } catch (JsonProcessingException ex) {

@@ -50,7 +50,6 @@ public class GetAllPreferenceForStudentResource extends ResourceBase {
     @Path("{studentId}")
     public Response getJson(@PathParam("studentId") int studentId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             List<Studentpreferencestable> spt = iLayer.getAllStudentPreferencesForStudent(studentId);
             return Response.ok(mapper.writeValueAsString(spt)).build();
         } catch (JsonProcessingException ex) {

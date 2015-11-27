@@ -42,7 +42,6 @@ public class PutAddNewStudentpreferenceResource extends ResourceBase{
     @Path("{courseCodes}/{numCoursesDesired}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("numCoursesDesired") int numCoursesDesired) {
-        InteractionLayer iLayer = InteractionLayer.Instance();
         iLayer.addNewStudentpreference(courseCodes, numCoursesDesired);
         return Response.ok().build();
     }

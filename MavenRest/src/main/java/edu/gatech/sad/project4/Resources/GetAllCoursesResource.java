@@ -47,9 +47,8 @@ public class GetAllCoursesResource extends ResourceBase{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson() {
-        InteractionLayer iLayer = InteractionLayer.Instance(); 
-        List<Coursetable> cList = iLayer.getCourseCatalog();
         try {
+            List<Coursetable> cList = iLayer.getCourseCatalog();
             return Response.ok(mapper.writeValueAsString(cList)).build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetAllProfessorsResource.class.getName()).log(Level.SEVERE, null, ex);

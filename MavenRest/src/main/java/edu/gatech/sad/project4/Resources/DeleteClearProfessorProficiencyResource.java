@@ -47,7 +47,6 @@ public class DeleteClearProfessorProficiencyResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("professorId") int professorId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.clearProfessorProficiency(professorId);
             return Response.ok().build();
         } catch (Throwable ex) {

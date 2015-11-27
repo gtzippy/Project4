@@ -49,7 +49,6 @@ public class GetStudentsInCourseResource extends ResourceBase {
     @Path("{courseCode}")
     public Response getJson(@PathParam("courseCode") String courseCode) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             List<Integer> students = iLayer.getStudentsInCourse(courseCode);
             return Response.ok(mapper.writeValueAsString(students)).build();
         } catch (JsonProcessingException ex) {

@@ -45,7 +45,6 @@ public class DeleteRemoveProfessorResource extends ResourceBase{
     @Path("{professorId}")
     public Response getJson(@PathParam("professorId") int professorId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();            
             iLayer.removeProfessor(professorId);
             return Response.ok().build();
         } catch (Throwable ex) {

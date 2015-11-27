@@ -43,7 +43,6 @@ public class GetAllTasResource extends ResourceBase{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson() {
-        InteractionLayer iLayer = InteractionLayer.Instance(); 
         List<Integer> sList = iLayer.getAllTas();
         Response r;
         try {

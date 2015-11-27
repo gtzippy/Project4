@@ -47,7 +47,6 @@ public class PutAddCourseCompleteToStudentResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("studentId") int studentId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.addCourseCompleteToStudent(courseCodes, studentId);
             return Response.ok().build();
         } catch (Throwable ex) {

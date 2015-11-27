@@ -45,7 +45,6 @@ public class PutAddNewProfessorResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("professorName") String professorName) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.addNewProfessor(professorName);
             return Response.ok().build();
         } catch (Throwable ex) {

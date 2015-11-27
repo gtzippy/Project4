@@ -53,7 +53,6 @@ public class GetProfessorResource extends ResourceBase{
         String professorString = null;
         //int intId = Integer.parseInt(id);
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();            
             Professorstable pt = iLayer.getProfessor(id);
             return Response.ok(mapper.writeValueAsString(pt)).build();
         } catch (JsonProcessingException ex) {

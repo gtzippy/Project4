@@ -47,7 +47,6 @@ public class GetStudentPreference extends ResourceBase{
     @Path("{studentPreferenceId}")
     public Response getJson(@PathParam("studentPreferenceId") int studentPreferenceId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             Studentpreferencestable spt = iLayer.getStudentPreference(studentPreferenceId);
             return Response.ok(mapper.writeValueAsString(spt)).build();
         } catch (JsonProcessingException ex) {

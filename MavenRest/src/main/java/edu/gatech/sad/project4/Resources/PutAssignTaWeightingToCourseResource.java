@@ -47,7 +47,6 @@ public class PutAssignTaWeightingToCourseResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("taWeighting") int taWeighting, @PathParam("courseCode") String courseCode) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.assignTaWeightingToCourse(taWeighting, courseCode);
             return Response.ok().build();
         } catch (Throwable ex) {

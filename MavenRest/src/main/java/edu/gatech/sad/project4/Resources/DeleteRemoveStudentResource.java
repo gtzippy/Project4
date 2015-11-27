@@ -45,7 +45,6 @@ public class DeleteRemoveStudentResource extends ResourceBase{
     @Path("{studentId}")
     public Response getJson(@PathParam("studentId") int studentId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();            
             iLayer.removeStudent(studentId);
             return Response.ok().build();
         } catch (Throwable ex) {

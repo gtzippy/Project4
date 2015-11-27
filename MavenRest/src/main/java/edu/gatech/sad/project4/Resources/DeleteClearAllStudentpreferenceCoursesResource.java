@@ -47,7 +47,6 @@ public class DeleteClearAllStudentpreferenceCoursesResource extends ResourceBase
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("preferenceId") int preferenceId) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.clearAllStudentpreferenceCourses(preferenceId);
             return Response.ok().build();
         } catch (Throwable ex) {

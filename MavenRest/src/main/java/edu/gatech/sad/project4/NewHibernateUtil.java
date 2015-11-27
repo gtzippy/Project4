@@ -21,6 +21,7 @@ public class NewHibernateUtil {
     private static final SessionFactory sessionFactory;
     static {
         InteractionLayer iLayer = InteractionLayer.Instance();
+        ResourceBase.setInteractionLayer(iLayer);
         ResourceBase.setObjectMapper(new ObjectMapper());
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 

@@ -46,7 +46,6 @@ public class DeleteRemoveCourseFromStudentpreferencetableResource extends Resour
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("preferenceId") int preferenceId) {
         try{
-        InteractionLayer iLayer = InteractionLayer.Instance();
         iLayer.removeCoursesFromStudentpreferencetable(courseCodes, preferenceId);
         return Response.ok().build();
         } catch(Throwable ex){

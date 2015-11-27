@@ -45,7 +45,6 @@ public class PutSetStudentTaResource extends ResourceBase{
     @Path("{id}/{taValue}")
     public Response getJson(@PathParam("id") int id, @PathParam("taValue") int taValue) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();            
             iLayer.setStudentTa(taValue, id);
             return Response.ok().build();
         } catch (Throwable ex) {

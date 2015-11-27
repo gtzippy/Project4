@@ -48,7 +48,6 @@ public class GetLatestCompleteProcessingstatustableEntryResource extends Resourc
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson() {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             Processingstatustable pst = iLayer.getLatestCompleteProcessingstatustableEntry();
             return Response.ok(mapper.writeValueAsString(pst)).build();
         } catch (JsonProcessingException ex) {

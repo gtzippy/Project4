@@ -51,7 +51,6 @@ public class GetStudentResource extends ResourceBase{
         String studentString = null;
         //int intId = Integer.parseInt(id);
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();            
             Studenttable st = iLayer.getStudent(id);
             return Response.ok(mapper.writeValueAsString(st)).build();
         } catch (JsonProcessingException ex) {

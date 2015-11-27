@@ -49,7 +49,6 @@ public class PutAddNewStudentResource extends ResourceBase{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("studentName") String studentName, @PathParam("password") String password) {
         try {
-            InteractionLayer iLayer = InteractionLayer.Instance();
             iLayer.addNewStudent(studentName, password);
             return Response.ok().build();
         } catch (Throwable ex) {
