@@ -25,6 +25,7 @@ import gurobi.GRBModel;
 import gurobi.GRBVar;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class CoreComputeEngine {
+	public final static int DEFAULT_MAX_COURSES = 2;
 	private CoreComputeEngineDataHolder ccedh = new CoreComputeEngineDataHolder();
 	private GRBModel model;
 	private GRBVar[][] studentCourseVars;
@@ -52,7 +54,7 @@ public class CoreComputeEngine {
 		Professorstable[] professors = ccedh.getProfessors();
 		Studenttable[] taPool = ccedh.getTaPool();
 		// The Gurobi environment
-        GRBEnv env;
+        GRBEnv env = null;
 		try {
 			env = new GRBEnv();
 
@@ -115,10 +117,16 @@ public class CoreComputeEngine {
             double objectiveValue = model.get(GRB.DoubleAttr.ObjVal);
 		} catch (GRBException e) {
 			e.printStackTrace();
+		} finally {
+			if (env != null) {
+				try {
+					env.dispose();
+				} catch(Exception e) {}
+			}
 		}
 	}
 
-	private void applyConstraints() {
+	private void applyConstraints() throws GRBException {
 		// student takes courses from "desired" list
 		constrainDesiredCourses();
 		// student takes up to "Studentpreferencestable.numCoursesDesired" or system-wide maxCourses
@@ -140,12 +148,59 @@ public class CoreComputeEngine {
 		constrainMaxStudentPerCourse();
 	}
 
-	private void constrainDesiredCourses() {
+	/**
+	 * Constrain courses to only those desired by the student.  We do this
+	 * by constraining the sum of all "not desired" courses to 0.
+	 */
+	private void constrainDesiredCourses() throws GRBException {
 		// student takes courses from "desired" list
+		Studenttable[] students = ccedh.getStudents();
+		Coursetable[] courses = ccedh.getCourses();
+		Map<Integer, List<String>> studentCoursesWantedMap = ccedh.getStudentCoursesWantedMap();
+		for (int i = 0; i < studentCourseVars.length; i++) {
+			Studenttable student = students[i];
+			List<String> coursesWantedList = studentCoursesWantedMap.get(student.getId());
+			GRBLinExpr desiredCourseConstraint = new GRBLinExpr();
+			for (int j = 0; j < studentCourseVars[i].length; j++) {
+				Coursetable course = courses[j];
+				if (!coursesWantedList.contains(course.getCourseCode())) {
+					desiredCourseConstraint.addTerm(1, studentCourseVars[i][j]);
+				}
+			}
+			String constraintName = "DESIREDCOURSESONLY_Student[" + i + "]";
+	       	model.addConstr(desiredCourseConstraint, GRB.EQUAL, 0, constraintName);
+		}
 	}
 
-	private void constrainMaxCoursesPerStudent() {
+	/**
+	 * Constrain total number of classes a student takes.  This is the lower of
+	 * the system wide max course value (hardcoded to 2 in this version) and the
+	 * desiredNumCourses from the preferences.
+	 */
+	private void constrainMaxCoursesPerStudent() throws GRBException {
 		// student takes up to "Studentpreferencestable.numCoursesDesired" or system-wide maxCourses
+		Studenttable[] students = ccedh.getStudents();
+		Map<Integer, Studentpreferencestable> studentStudentPrefsMap = ccedh.getStudentStudentPrefsMap();
+		for (int i = 0; i < studentCourseVars.length; i++) {
+			Studenttable student = students[i];
+			Studentpreferencestable studentPrefs = studentStudentPrefsMap.get(student.getId());
+			int numCoursesDesired = studentPrefs.getNumCoursesDesired();
+			if (numCoursesDesired == 0) {
+				// student doesn't want any courses
+				continue;
+			}
+			// numCoursesDesired can't exceed system-wide maxCourses setting
+			if (numCoursesDesired > DEFAULT_MAX_COURSES) {
+				numCoursesDesired = DEFAULT_MAX_COURSES;
+			}
+
+			GRBLinExpr maxCoursePerStudentConstraint = new GRBLinExpr();
+			for (int j = 0; j < studentCourseVars[i].length; j++) {
+				maxCoursePerStudentConstraint.addTerm(1, studentCourseVars[i][j]);
+			}
+			String constraintName = "MAXCOURSE_Student[" + i + "]";
+	       	model.addConstr(maxCoursePerStudentConstraint, GRB.EQUAL, numCoursesDesired, constraintName);
+		}
 	}
 
 	private void constrainPrereqs() {
@@ -160,12 +215,54 @@ public class CoreComputeEngine {
 		// course must have a professor assigned
 	}
 
-	private void constrainCourseByProfessorCompetency() {
-		// professor must have competency in that course
+	/**
+	 * Constrain the courses that a professor can teach.
+	 * We do this by creating a constraint that will force all
+	 * classes a teach doesn't have a competency in to sum to zero.
+	 */
+	private void constrainCourseByProfessorCompetency() throws GRBException {
+		// professor can teach 1 course (???)
+		Professorstable professors[] = ccedh.getProfessors();
+		Coursetable courses[] = ccedh.getCourses();
+		for (int i = 0; i < professorCourseVars.length; i++) {
+			Professorstable professor = professors[i];
+			Map<Integer, Set<String>> professorCompetenciesMap = ccedh.getProfessorCompetenciesMap();
+			Set<String> competencies = professorCompetenciesMap.get(professor.getProfessorId());
+	        GRBLinExpr courseByProfessorcompetencyConstraint = new GRBLinExpr();
+			for (int j = 0; j < professorCourseVars[i].length; j++) {
+				Coursetable course = courses[j];
+				if (!competencies.contains(course.getCourseCode())) {
+					// only add terms for courses the professor *doesn't* teach
+					courseByProfessorcompetencyConstraint.addTerm(1, professorCourseVars[i][j]);
+				};
+			}
+			String constraintName = "COMPETENCIESONLY_Professor[" + i + "]";
+	       	model.addConstr(courseByProfessorcompetencyConstraint, GRB.EQUAL, 0, constraintName);
+		}
 	}
 
-	private void constrainMaxCoursesPerProfessor() {
+	/**
+	 * Contrain the number of classes the professor can teach to a max of 1.
+	 * We only consider the courses where the professor has an assigned competency.
+	 */
+	private void constrainMaxCoursesPerProfessor() throws GRBException {
 		// professor can teach 1 course (???)
+		Professorstable professors[] = ccedh.getProfessors();
+		Coursetable courses[] = ccedh.getCourses();
+		for (int i = 0; i < professorCourseVars.length; i++) {
+			Professorstable professor = professors[i];
+			Map<Integer, Set<String>> professorCompetenciesMap = ccedh.getProfessorCompetenciesMap();
+			Set<String> competencies = professorCompetenciesMap.get(professor.getProfessorId());
+	        GRBLinExpr maxCoursePerProfessorConstraint = new GRBLinExpr();
+			for (int j = 0; j < professorCourseVars[i].length; j++) {
+				Coursetable course = courses[j];
+				if (competencies.contains(course.getCourseCode())) {
+					maxCoursePerProfessorConstraint.addTerm(1, professorCourseVars[i][j]);
+				};
+			}
+			String constraintName = "MAXPROFCOURSE_Professor[i]";
+	       	model.addConstr(maxCoursePerProfessorConstraint, GRB.LESS_EQUAL, 1, constraintName);
+		}
 	}
 
 	private void constrainTaMustHaveTakenCourse() {
@@ -179,8 +276,9 @@ public class CoreComputeEngine {
 
 	// write results to DB
 	private void generateResults() {
+		
 		Studenttable[] students = ccedh.getStudents();
-		Map<Integer, Integer> studentStudentPrefsMap = ccedh.getStudentStudentPrefsMap();
+		Map<Integer, Studentpreferencestable> studentStudentPrefsMap = ccedh.getStudentStudentPrefsMap();
 		Coursetable[] courses = ccedh.getCourses();
 		Professorstable[] professors = ccedh.getProfessors();
 		Studenttable[] taPool = ccedh.getTaPool();
@@ -219,8 +317,7 @@ public class CoreComputeEngine {
 					scah.persist(sca);
 
 					// update Studentprefs with processingId
-					int spId = studentStudentPrefsMap.get(students[i].getId());
-					Studentpreferencestable sp = sph.findById(spId);
+					Studentpreferencestable sp = studentStudentPrefsMap.get(students[i].getId());
 					sp.setProcessingStatusId(processingStatusId);
 				}
 			}
