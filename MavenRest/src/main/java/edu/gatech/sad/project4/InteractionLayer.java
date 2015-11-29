@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
@@ -15,27 +11,28 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import edu.gatech.sad.project4.Resources.ResourceBase;
+import edu.gatech.sad.project4.engine.CoreComputeEngineManager;
 import edu.gatech.sad.project4.entities.Administratortable;
-import edu.gatech.sad.project4.hometables.AdministratortableHome;
 import edu.gatech.sad.project4.entities.Coursetable;
-import edu.gatech.sad.project4.hometables.CoursetableHome;
 import edu.gatech.sad.project4.entities.Offeredcoursestable;
 import edu.gatech.sad.project4.entities.Processingstatustable;
 import edu.gatech.sad.project4.entities.Professorstable;
-import edu.gatech.sad.project4.hometables.ProfessorstableHome;
 import edu.gatech.sad.project4.entities.Studentcourseassignmenttable;
 import edu.gatech.sad.project4.entities.Studentpreferencestable;
-import edu.gatech.sad.project4.hometables.StudentpreferencestableHome;
 import edu.gatech.sad.project4.entities.Studenttable;
-import edu.gatech.sad.project4.hometables.StudenttableHome;
 import edu.gatech.sad.project4.entities.Tacourseassignmenttable;
+import edu.gatech.sad.project4.hometables.AdministratortableHome;
+import edu.gatech.sad.project4.hometables.CoursetableHome;
+import edu.gatech.sad.project4.hometables.ProfessorstableHome;
+import edu.gatech.sad.project4.hometables.StudentpreferencestableHome;
+import edu.gatech.sad.project4.hometables.StudenttableHome;
 
 public class InteractionLayer {
 
     private static final Log log = LogFactory.getLog(ApplicationConfig.class);
     private SessionFactory sess;
     private static InteractionLayer iLayer;
+    private CoreComputeEngineManager ccem;
 
     /**
      * returns a single Professorstable object
@@ -44,22 +41,16 @@ public class InteractionLayer {
      */
     public InteractionLayer(SessionFactory sessionFactory) {
         sess = sessionFactory;
+    	log.debug("creating CoreComputeEngineManager");
+		ccem = new CoreComputeEngineManager();
+    	log.debug("starting CoreComputeEngineManager");
+		ccem.start();
     }
 
     public static InteractionLayer Instance() {
         if (iLayer == null) {
             SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
             iLayer = new InteractionLayer(sessionFactory);
-            try {
-                Context ctx = new InitialContext();
-                ctx.rebind("SessionFactory", sessionFactory);
-
-            } catch (NamingException e) {
-                log.error(e.getStackTrace());
-                e.printStackTrace();
-            }
-            iLayer = new InteractionLayer(sessionFactory);
-            ResourceBase.setInteractionLayer(iLayer);
         }
         return iLayer;
     }
@@ -129,6 +120,7 @@ public class InteractionLayer {
             log.info(c);
         }
         transaction.rollback();
+        engineCall();
         return allResults;
     }
 
@@ -676,7 +668,7 @@ public class InteractionLayer {
     }
 
     private void engineCall() {
-
+    	ccem.triggerEngine();
     }
 
 }
