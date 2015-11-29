@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -20,14 +22,23 @@ import edu.gatech.sad.project4.entities.Studentpreferencestable;
 import edu.gatech.sad.project4.entities.Studenttable;
 
 public class CoreComputeEngineDataHolder {
+	private static final Log log = LogFactory.getLog(CoreComputeEngineStub.class);
+
+	// Course related data
 	private Coursetable[] courses = new Coursetable[0];
 	private Map<String, Coursetable> courseMap = new HashMap<String, Coursetable>();
+
+	// Student related data
 	private Studenttable[] students = new Studenttable[0];
 	private Map<Integer, List<String>> studentCoursesWantedMap = new HashMap<Integer, List<String>>();
 	private Map<Integer, Set<String>> studentCoursesTakenMap = new HashMap<Integer, Set<String>>();
 	private Map<Integer, Studentpreferencestable> studentStudentPrefsMap = new HashMap<Integer, Studentpreferencestable>();
+
+	// Professor related data
 	private Professorstable[] professors = new Professorstable[0];
 	private Map<Integer, Set<String>> professorCompetenciesMap = new HashMap<Integer, Set<String>>();
+
+	// TA related data
 	private Set<Integer> taPoolSet = new HashSet<Integer>();
 	private Studenttable[] taPool = new Studenttable[0];
 
@@ -155,12 +166,14 @@ public class CoreComputeEngineDataHolder {
 	 * Loads all TA students.
 	 */
 	private void buildTaPoolData() {
+		List<Studenttable> studentTableList = new ArrayList<Studenttable>();
 		for (Studenttable student : students) {
 			if (student.isTa()) {
 				taPoolSet.add(student.getId());
+				studentTableList.add(student);
 			}
 		}
-		taPool = taPoolSet.toArray(taPool);
+		taPool = studentTableList.toArray(taPool);
 	}
 
 	/**

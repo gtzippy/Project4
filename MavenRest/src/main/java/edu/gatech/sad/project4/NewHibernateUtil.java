@@ -5,6 +5,9 @@
  */
 package edu.gatech.sad.project4;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -32,7 +35,12 @@ public class NewHibernateUtil {
         	ServiceRegistry registry = new ServiceRegistryBuilder().applySettings(configuration.getProperties())
         			.buildServiceRegistry();
         	sessionFactory = configuration.buildSessionFactory(registry);
-            InteractionLayer.Instance();
+
+        	Context ctx = new InitialContext();
+            ctx.rebind("SessionFactory", sessionFactory);
+
+            InteractionLayer iLayer = InteractionLayer.Instance();
+            ResourceBase.setInteractionLayer(iLayer);
         } catch (Throwable ex) {
             // Log the exception. 
             System.err.println("Initial SessionFactory creation failed." + ex);

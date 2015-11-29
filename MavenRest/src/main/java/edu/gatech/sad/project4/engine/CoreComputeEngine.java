@@ -3,6 +3,7 @@ package edu.gatech.sad.project4.engine;
 import edu.gatech.sad.project4.NewHibernateUtil;
 import edu.gatech.sad.project4.entities.Coursetable;
 import edu.gatech.sad.project4.entities.Offeredcoursestable;
+import edu.gatech.sad.project4.entities.Processingstatustable;
 import edu.gatech.sad.project4.entities.Professorcourseassignmenttable;
 import edu.gatech.sad.project4.entities.ProfessorcourseassignmenttableId;
 import edu.gatech.sad.project4.entities.Professorstable;
@@ -13,6 +14,7 @@ import edu.gatech.sad.project4.entities.Studenttable;
 import edu.gatech.sad.project4.entities.Tacourseassignmenttable;
 import edu.gatech.sad.project4.entities.TacourseassignmenttableId;
 import edu.gatech.sad.project4.hometables.OfferedcoursestableHome;
+import edu.gatech.sad.project4.hometables.ProcessingstatustableHome;
 import edu.gatech.sad.project4.hometables.ProfessorcourseassignmenttableHome;
 import edu.gatech.sad.project4.hometables.StudentcourseassignmenttableHome;
 import edu.gatech.sad.project4.hometables.StudentpreferencestableHome;
@@ -24,35 +26,66 @@ import gurobi.GRBLinExpr;
 import gurobi.GRBModel;
 import gurobi.GRBVar;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class CoreComputeEngine {
-	public final static int DEFAULT_MAX_COURSES = 2;
-	private CoreComputeEngineDataHolder ccedh = new CoreComputeEngineDataHolder();
+	private static final Log log = LogFactory.getLog(CoreComputeEngine.class);
+
+	public final static int DEFAULT_STUDENT_MAX_COURSES = 2;
+	public final static int DEFAULT_PROFESSOR_MAX_COURSES = 1;
+	public final static int DEFAULT_TA_MAX_COURSES = 1;
+
+	private CoreComputeEngineDataHolder ccedh = null;
+	private int processingStatusId;
+
+	// Gurobi objects
 	private GRBModel model;
 	private GRBVar[][] studentCourseVars;
 	private GRBVar[][] professorCourseVars;
 	private GRBVar[][] taCourseVars;
-	private int processingStatusId;
 
+	/**
+	 * Constructs a CoreComputeEngine instance for the supplied ProcessingId.
+	 * 
+	 * @param processingStatusId
+	 */
 	public CoreComputeEngine(int processingStatusId) {
+		log.debug("Constructing CoreComputeEngine for processingStatusId:" + processingStatusId);
 		this.processingStatusId = processingStatusId;
-		solve();
-		generateResults();
+
+		// update PS record with execution start time
+		Session s = NewHibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction t = s.beginTransaction();
+		ProcessingstatustableHome psh = new ProcessingstatustableHome();
+		Processingstatustable ps = psh.findById(processingStatusId);
+		if (ps == null) {
+			log.error("did not find requested processingStatusId:" + processingStatusId);
+			System.exit(1);
+		}
+		ps.setExecutionStartTime(new Date());
+		t.commit();
 	}
 
-	// run the gurobi solver
-	private void solve() {
+	/**
+	 * Run Gurobi to produce a constraint based solution.
+	 */
+	public void solve() {
+		ccedh = new CoreComputeEngineDataHolder();
+
 		Studenttable[] students = ccedh.getStudents();
 		Coursetable[] courses = ccedh.getCourses();
 		Professorstable[] professors = ccedh.getProfessors();
 		Studenttable[] taPool = ccedh.getTaPool();
+
 		// The Gurobi environment
         GRBEnv env = null;
 		try {
@@ -113,8 +146,11 @@ public class CoreComputeEngine {
             // Optimize the model
             model.optimize();
 
-            // retrieve the results
+            // retrieve the result of the optimization
             double objectiveValue = model.get(GRB.DoubleAttr.ObjVal);
+
+            // write results to the DB
+            generateResults();
 		} catch (GRBException e) {
 			e.printStackTrace();
 		} finally {
@@ -126,6 +162,11 @@ public class CoreComputeEngine {
 		}
 	}
 
+	/**
+	 * Convenience method to put all the constraint calls in one place.
+	 * 
+	 * @throws GRBException
+	 */
 	private void applyConstraints() throws GRBException {
 		// student takes courses from "desired" list
 		constrainDesiredCourses();
@@ -190,8 +231,8 @@ public class CoreComputeEngine {
 				continue;
 			}
 			// numCoursesDesired can't exceed system-wide maxCourses setting
-			if (numCoursesDesired > DEFAULT_MAX_COURSES) {
-				numCoursesDesired = DEFAULT_MAX_COURSES;
+			if (numCoursesDesired > DEFAULT_STUDENT_MAX_COURSES) {
+				numCoursesDesired = DEFAULT_STUDENT_MAX_COURSES;
 			}
 
 			GRBLinExpr maxCoursePerStudentConstraint = new GRBLinExpr();
@@ -380,7 +421,12 @@ public class CoreComputeEngine {
 				tac.setCourseCode(sb.toString());
 				tch.persist(tac);
 			}
-			
+
+			// update processingstatus to indicate complete
+			ProcessingstatustableHome psh = new ProcessingstatustableHome();
+			Processingstatustable ps = psh.findById(processingStatusId);
+			ps.setCompleted(true);
+
 			t.commit();
 		} catch (GRBException e) {
 			e.printStackTrace();
