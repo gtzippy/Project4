@@ -120,7 +120,6 @@ public class InteractionLayer {
             log.info(c);
         }
         transaction.rollback();
-        engineCall();
         return allResults;
     }
 
