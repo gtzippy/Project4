@@ -25,7 +25,7 @@ public class CoreComputeEngineDataHolder {
 	private Studenttable[] students = new Studenttable[0];
 	private Map<Integer, List<String>> studentCoursesWantedMap = new HashMap<Integer, List<String>>();
 	private Map<Integer, Set<String>> studentCoursesTakenMap = new HashMap<Integer, Set<String>>();
-	private Map<Integer, Integer> studentStudentPrefsMap = new HashMap<Integer, Integer>();
+	private Map<Integer, Studentpreferencestable> studentStudentPrefsMap = new HashMap<Integer, Studentpreferencestable>();
 	private Professorstable[] professors = new Professorstable[0];
 	private Map<Integer, Set<String>> professorCompetenciesMap = new HashMap<Integer, Set<String>>();
 	private Set<Integer> taPoolSet = new HashSet<Integer>();
@@ -103,7 +103,7 @@ public class CoreComputeEngineDataHolder {
 			}
 
 			// save the sp id so we can update the correct record later
-			studentStudentPrefsMap.put(student.getId(), sp.getPreferenceId());
+			studentStudentPrefsMap.put(student.getId(), sp);
 			
 			// build coursesWantedList
 			List<String> coursesWantedList = new ArrayList<String>();
@@ -199,7 +199,7 @@ public class CoreComputeEngineDataHolder {
 	 * 
 	 * @return
 	 */
-	public Map<Integer, Integer> getStudentStudentPrefsMap() {
+	public Map<Integer, Studentpreferencestable> getStudentStudentPrefsMap() {
 		return studentStudentPrefsMap;
 	}
 
