@@ -6,7 +6,7 @@
     <class name="edu.gatech.sad.project4.entities.Processingstatustable" table="processingstatustable" catalog="mydb" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="registeredTime" type="timestamp">
             <column name="registeredTime" length="19" not-null="true" />
