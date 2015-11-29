@@ -17,7 +17,7 @@ public class ApplicationConfig extends Application {
     
     @Override
     public Set<Class<?>> getClasses() {
-        //InteractionLayer.Instance();
+    	NewHibernateUtil.getSessionFactory();
         Set<Class<?>> resources = new java.util.HashSet<Class<?>>();
         addRestResourceClasses(resources);
         return resources;

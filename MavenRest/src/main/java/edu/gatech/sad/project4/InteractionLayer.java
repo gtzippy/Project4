@@ -15,6 +15,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import edu.gatech.sad.project4.Resources.ResourceBase;
 import edu.gatech.sad.project4.entities.Administratortable;
 import edu.gatech.sad.project4.hometables.AdministratortableHome;
 import edu.gatech.sad.project4.entities.Coursetable;
@@ -58,6 +59,7 @@ public class InteractionLayer {
                 e.printStackTrace();
             }
             iLayer = new InteractionLayer(sessionFactory);
+            ResourceBase.setInteractionLayer(iLayer);
         }
         return iLayer;
     }

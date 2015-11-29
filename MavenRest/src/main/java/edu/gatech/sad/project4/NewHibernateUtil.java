@@ -5,10 +5,14 @@
  */
 package edu.gatech.sad.project4;
 
-import edu.gatech.sad.project4.Resources.ResourceBase;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.gatech.sad.project4.Resources.ResourceBase;
 
 /**
  * Hibernate Utility class with a convenient method to get Session Factory
@@ -20,13 +24,15 @@ public class NewHibernateUtil {
 
     private static final SessionFactory sessionFactory;
     static {
-        InteractionLayer iLayer = InteractionLayer.Instance();
-        ResourceBase.setInteractionLayer(iLayer);
         ResourceBase.setObjectMapper(new ObjectMapper());
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 
             // config file.
-            sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+            Configuration configuration = new Configuration().configure();
+        	ServiceRegistry registry = new ServiceRegistryBuilder().applySettings(configuration.getProperties())
+        			.buildServiceRegistry();
+        	sessionFactory = configuration.buildSessionFactory(registry);
+            InteractionLayer.Instance();
         } catch (Throwable ex) {
             // Log the exception. 
             System.err.println("Initial SessionFactory creation failed." + ex);
