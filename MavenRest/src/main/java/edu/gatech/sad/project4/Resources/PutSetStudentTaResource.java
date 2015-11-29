@@ -42,10 +42,10 @@ public class PutSetStudentTaResource extends ResourceBase{
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id}/{taValue}")
-    public Response getJson(@PathParam("id") int id, @PathParam("taValue") int taValue) {
+    @Path("{studentId}/{taValue}")
+    public Response getJson(@PathParam("studentId") int studentId, @PathParam("taValue") int taValue) {
         try {
-            iLayer.setStudentTa(taValue, id);
+            iLayer.setStudentTa(taValue, studentId);
             return Response.ok().build();
         } catch (Throwable ex) {
             Logger.getLogger(PutSetStudentTaResource.class.getName()).log(Level.SEVERE, null, ex);

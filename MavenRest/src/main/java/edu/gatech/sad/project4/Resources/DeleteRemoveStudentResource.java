@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
  */
 @Path("/DeleteRemoveStudent")
 public class DeleteRemoveStudentResource extends ResourceBase{
-
+ 
     @Context
     private UriInfo context;
 

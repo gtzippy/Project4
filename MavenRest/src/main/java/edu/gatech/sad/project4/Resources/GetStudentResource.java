@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
  *
  * @author smithda
  */
-@Path("/getStudent")
+@Path("/GetStudent")
 public class GetStudentResource extends ResourceBase{
 
     @Context

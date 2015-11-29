@@ -5,6 +5,9 @@
  */
 package edu.gatech.sad.project4.Resources;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import edu.gatech.sad.project4.InteractionLayer;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -42,8 +45,13 @@ public class PutAddCoursesToStudentpreferencetableResource extends ResourceBase{
     @Path("{courseCodes}/{preferenceId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("preferenceId") int preferenceId) {
-        iLayer.addCoursesToStudentpreferencetable(courseCodes, preferenceId);
+    try{
+    	iLayer.addCoursesToStudentpreferencetable(courseCodes, preferenceId);
         return Response.ok().build();
+    } catch (Throwable ex) {
+    		Logger.getLogger(PutAddCoursesToStudentpreferencetableResource.class.getName()).log(Level.SEVERE, null, ex);
+    		return Response.noContent().type(ex.getMessage()).build();
+    	}
     }
 
     /**

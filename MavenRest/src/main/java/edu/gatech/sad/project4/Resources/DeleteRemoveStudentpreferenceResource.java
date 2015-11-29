@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Daniel
  */
-@Path("generic")
+@Path("/DeleteRemoveStudentpreference")
 public class DeleteRemoveStudentpreferenceResource extends ResourceBase{
 
     @Context
@@ -43,7 +43,7 @@ public class DeleteRemoveStudentpreferenceResource extends ResourceBase{
      * @return an instance of javax.ws.rs.core.Response
      */
     @GET
-    @Path("{preferenceId}}")
+    @Path("{preferenceId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson(@PathParam("preferenceId") int preferenceId) {
         try{

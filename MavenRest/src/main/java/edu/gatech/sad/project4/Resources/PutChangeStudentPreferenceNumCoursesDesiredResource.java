@@ -5,6 +5,9 @@
  */
 package edu.gatech.sad.project4.Resources;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import edu.gatech.sad.project4.InteractionLayer;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -42,12 +45,16 @@ public class PutChangeStudentPreferenceNumCoursesDesiredResource extends Resourc
      * @return an instance of javax.ws.rs.core.Response
      */
     @GET
-    @Path("{studentId}/{numCoursesDesired}")
+    @Path("{studentId}/{numCoursesDesired}/{preferenceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJson(@PathParam("studentId") int studentId, @PathParam("numCoursesDesired") int numCoursesDesired) {
-        iLayer.changeStudentPreferenceNumCoursesDesired(12, studentId);
-        return Response.accepted().build();
-        //throw new UnsupportedOperationException();
+    public Response getJson(@PathParam("numCoursesDesired") int numCoursesDesired, @PathParam("preferenceId") int preferenceId) {
+    	try{
+    		iLayer.changeStudentPreferenceNumCoursesDesired(numCoursesDesired, preferenceId);
+    		return Response.accepted().build();
+    	} catch (Throwable ex) {
+    		Logger.getLogger(PutChangeStudentPreferenceNumCoursesDesiredResource.class.getName()).log(Level.SEVERE, null, ex);
+    		return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).build();
+    	}
     }
 
     /**

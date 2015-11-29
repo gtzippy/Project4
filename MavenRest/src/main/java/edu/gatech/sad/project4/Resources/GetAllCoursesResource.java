@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Daniel
  */
-@Path("/getAllCourses")
+@Path("/GetAllCourses")
 public class GetAllCoursesResource extends ResourceBase{
 
     @Context

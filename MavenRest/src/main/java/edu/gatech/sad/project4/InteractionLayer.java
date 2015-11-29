@@ -240,14 +240,14 @@ public class InteractionLayer {
      * @param courses desired courses
      * @param numCoursesDesired number of courses desired
      */
-    public void addNewStudentpreference(String courses, Integer numCoursesDesired) {
+    public void addNewStudentpreference(String courses, Integer numCoursesDesired, Integer studentId) {
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
         StudentpreferencestableHome spsHome = new StudentpreferencestableHome();
         Studentpreferencestable student = new Studentpreferencestable();
         student.setCourses(courses);
         student.setNumCoursesDesired(numCoursesDesired);
-        spsHome.persist(student);
+        student.setStudentId(studentId);
         transaction.commit();
         engineCall();
     }
