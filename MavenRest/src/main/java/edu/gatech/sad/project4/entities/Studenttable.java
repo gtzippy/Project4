@@ -9,7 +9,7 @@ package edu.gatech.sad.project4.entities;
 public class Studenttable  implements java.io.Serializable {
 
 
-     private Integer id;
+     private int id;
      private String name;
      private String password;
      private boolean ta;
