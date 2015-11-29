@@ -50,10 +50,10 @@ public class GetStudentsInCourseResource extends ResourceBase {
     public Response getJson(@PathParam("courseCode") String courseCode) {
         try {
             List<Integer> students = iLayer.getStudentsInCourse(courseCode);
-            return Response.ok(mapper.writeValueAsString(students)).build();
+            return Response.ok(mapper.writeValueAsString(students)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetStudentsInCourseResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

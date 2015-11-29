@@ -48,10 +48,10 @@ public class GetStudentPreference extends ResourceBase{
     public Response getJson(@PathParam("studentPreferenceId") int studentPreferenceId) {
         try {
             Studentpreferencestable spt = iLayer.getStudentPreference(studentPreferenceId);
-            return Response.ok(mapper.writeValueAsString(spt)).build();
+            return Response.ok(mapper.writeValueAsString(spt)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetStudentPreference.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

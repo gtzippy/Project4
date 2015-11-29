@@ -79,6 +79,16 @@ public class InteractionLayer {
         transaction.rollback();
         return student;
     }
+    
+    public Administratortable getAdmin(Integer adminId){
+        Session s = sess.getCurrentSession();
+        Transaction transaction = s.beginTransaction();
+        AdministratortableHome ptHome = new AdministratortableHome();
+        Administratortable admin = ptHome.findById(adminId);
+        log.info(admin);
+        transaction.rollback();
+        return admin;
+    }
 
     /**
      * returns a course

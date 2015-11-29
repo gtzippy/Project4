@@ -54,10 +54,10 @@ public class GetProfessorResource extends ResourceBase{
         //int intId = Integer.parseInt(id);
         try {
             Professorstable pt = iLayer.getProfessor(id);
-            return Response.ok(mapper.writeValueAsString(pt)).build();
+            return Response.ok(mapper.writeValueAsString(pt)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetProfessorResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

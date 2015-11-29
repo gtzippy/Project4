@@ -50,10 +50,10 @@ public class PutAddNewStudentResource extends ResourceBase{
     public Response getJson(@PathParam("studentName") String studentName, @PathParam("password") String password) {
         try {
             iLayer.addNewStudent(studentName, password);
-            return Response.ok().build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         } catch (Throwable ex) {
             Logger.getLogger(PutAddNewStudentResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

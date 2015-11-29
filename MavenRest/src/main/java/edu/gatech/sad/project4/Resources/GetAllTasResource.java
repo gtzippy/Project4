@@ -46,11 +46,11 @@ public class GetAllTasResource extends ResourceBase{
         List<Integer> sList = iLayer.getAllTas();
         Response r;
         try {
-            r = Response.ok(mapper.writeValueAsString(sList)).build();
+            r = Response.ok(mapper.writeValueAsString(sList)).header("Access-Control-Allow-Origin", "*").build();
             return r;
         } catch (Throwable ex) {
             Logger.getLogger(GetAllProfessorsResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

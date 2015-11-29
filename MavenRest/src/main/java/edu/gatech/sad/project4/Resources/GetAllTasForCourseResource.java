@@ -50,10 +50,10 @@ public class GetAllTasForCourseResource extends ResourceBase {
     public Response getJson(@PathParam("courseCode") String courseCode) {
         try {
             List<Integer> tas = iLayer.getAllTasForCourse(courseCode);
-            return Response.ok(mapper.writeValueAsString(tas)).build();
+            return Response.ok(mapper.writeValueAsString(tas)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetAllTasForCourseResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         } 
     }
 
