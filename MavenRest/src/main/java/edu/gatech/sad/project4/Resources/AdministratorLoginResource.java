@@ -21,49 +21,45 @@ import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import edu.gatech.sad.project4.ServerResponse;
-import edu.gatech.sad.project4.entities.Coursetable;
+import edu.gatech.sad.project4.entities.Administratortable;
 
 /**
  * REST Web Service
  *
- * @author Daniel
+ * @author smithda
  */
-@Path("/GetCourse")
-public class GetCourseResource extends ResourceBase{
+@Path("/AdministratorLogin")
+public class AdministratorLoginResource extends ResourceBase{
 
     @Context
     private UriInfo context;
 
     /**
-     * Creates a new instance of GetCourseResource
+     * Creates a new instance of GetStudentResource
      */
-    public GetCourseResource() {
+    public AdministratorLoginResource() {
     }
 
     /**
-     * Retrieves representation of an instance of
-     * edu.gatech.sad.project4.Resources.GetCourseResource
-     *
+     * Retrieves representation of an instance of edu.gatech.sad.project4.GetStudentResource
      * @return an instance of java.lang.String
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{courseCode}")
-    public Response getJson(@PathParam("courseCode") String courseCode) {
+    @Path("{id}/{enteredPassword}")
+    public Response getJson(@PathParam("id") int id, @PathParam("enteredPassword") String enteredPassword) {
         try {
-            Coursetable ct = iLayer.getCourse(courseCode);
-            ServerResponse sResponse = new ServerResponse();
-            return Response.ok(mapper.writeValueAsString(ct)).header("Access-Control-Allow-Origin", "*").build();
+            Administratortable at = iLayer.getAdmin(id);
+            boolean loggedIn = at.getPassword().equals(enteredPassword);
+            return Response.ok(mapper.writeValueAsString(loggedIn)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(GetCourseResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
+            Logger.getLogger(GetProfessorResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.noContent().type(ex.getMessage()).build();
         }
     }
 
     /**
-     * PUT method for updating or creating an instance of GetCourseResource
-     *
+     * PUT method for updating or creating an instance of GetStudentResource
      * @param content representation for the resource
      */
     @PUT

@@ -49,10 +49,10 @@ public class GetAllProfessorsResource extends ResourceBase {
     public Response getJson() {
         try {
         	List<Professorstable> pList = iLayer.getAllProfessors();
-            return Response.ok(mapper.writeValueAsString(pList)).build();
+            return Response.ok(mapper.writeValueAsString(pList)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetAllProfessorsResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

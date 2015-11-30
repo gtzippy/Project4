@@ -5,19 +5,21 @@
  */
 package edu.gatech.sad.project4.Resources;
 
-import edu.gatech.sad.project4.InteractionLayer;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import edu.gatech.sad.project4.entities.Studenttable;
 
 /**
  * REST Web Service
@@ -43,14 +45,14 @@ public class GetAllTasResource extends ResourceBase{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJson() {
-        List<Integer> sList = iLayer.getAllTas();
+        List<Studenttable> sList = iLayer.getAllTas();
         Response r;
         try {
-            r = Response.ok(mapper.writeValueAsString(sList)).build();
+            r = Response.ok(mapper.writeValueAsString(sList)).header("Access-Control-Allow-Origin", "*").build();
             return r;
         } catch (Throwable ex) {
             Logger.getLogger(GetAllProfessorsResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

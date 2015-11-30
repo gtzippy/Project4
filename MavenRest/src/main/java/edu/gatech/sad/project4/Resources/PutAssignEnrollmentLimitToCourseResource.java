@@ -48,10 +48,10 @@ public class PutAssignEnrollmentLimitToCourseResource extends ResourceBase{
     public Response getJson(@PathParam("enrollmentLimit") int enrollmentLimit, @PathParam("courseCode") String courseCode) {
         try {
             iLayer.assignEnrollmentLimitToCourse(enrollmentLimit, courseCode);
-            return Response.ok().build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         } catch (Throwable ex) {
             Logger.getLogger(PutAssignEnrollmentLimitToCourseResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).build();
+            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

@@ -49,10 +49,10 @@ public class GetLatestCompleteProcessingstatustableEntryResource extends Resourc
     public Response getJson() {
         try {
             Processingstatustable pst = iLayer.getLatestCompleteProcessingstatustableEntry();
-            return Response.ok(mapper.writeValueAsString(pst)).build();
+            return Response.ok(mapper.writeValueAsString(pst)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetLatestCompleteProcessingstatustableEntryResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }        
     }
 

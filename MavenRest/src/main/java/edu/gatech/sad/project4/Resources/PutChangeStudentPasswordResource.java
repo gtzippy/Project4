@@ -48,10 +48,10 @@ public class PutChangeStudentPasswordResource extends ResourceBase{
     public Response getJson(@PathParam("studentId") int studentId, @PathParam("newPassword") String newPassword) {
         try {
             iLayer.changeStudentPassword(studentId, newPassword);
-            return Response.ok().build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         } catch (Throwable ex) {
             Logger.getLogger(PutChangeStudentPasswordResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).build();
+            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

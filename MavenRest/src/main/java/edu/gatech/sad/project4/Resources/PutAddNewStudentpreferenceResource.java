@@ -47,10 +47,10 @@ public class PutAddNewStudentpreferenceResource extends ResourceBase{
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("numCoursesDesired") int numCoursesDesired, @PathParam("studentId") int studentId) {
         try{
         	iLayer.addNewStudentpreference(courseCodes, numCoursesDesired, studentId);
-        	return Response.ok().build();
+        	return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         } catch (Throwable ex) {
         	Logger.getLogger(PutAddNewStudentpreferenceResource.class.getName()).log(Level.SEVERE, null, ex);
-        	return Response.noContent().type(ex.getMessage()).build();
+        	return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

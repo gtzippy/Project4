@@ -48,10 +48,10 @@ public class DeleteRemoveProfessorProficiencyResource extends ResourceBase{
     public Response getJson(@PathParam("courseCodes") String courseCodes, @PathParam("professorId") int professorId) {
         try {
             iLayer.removeProfessorProficiency(courseCodes, professorId);
-            return Response.ok().build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         } catch (Throwable ex) {
             Logger.getLogger(DeleteRemoveProfessorProficiencyResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).build();
+            return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

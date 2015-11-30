@@ -46,10 +46,10 @@ public class GetOfferedCoursesResource extends ResourceBase{
     public Response getJson() {
         try {
             List<String> ocs = iLayer.getOfferedCourses();
-            return Response.ok(mapper.writeValueAsString(ocs)).build();
+            return Response.ok(mapper.writeValueAsString(ocs)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
             Logger.getLogger(GetOfferedCoursesResource.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.noContent().type(ex.getMessage()).build();
+            return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 

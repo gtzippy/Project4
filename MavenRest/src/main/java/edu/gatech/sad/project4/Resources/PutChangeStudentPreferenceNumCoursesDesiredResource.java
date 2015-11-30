@@ -50,10 +50,10 @@ public class PutChangeStudentPreferenceNumCoursesDesiredResource extends Resourc
     public Response getJson(@PathParam("numCoursesDesired") int numCoursesDesired, @PathParam("preferenceId") int preferenceId) {
     	try{
     		iLayer.changeStudentPreferenceNumCoursesDesired(numCoursesDesired, preferenceId);
-    		return Response.accepted().build();
+    		return Response.accepted().header("Access-Control-Allow-Origin", "*").build();
     	} catch (Throwable ex) {
     		Logger.getLogger(PutChangeStudentPreferenceNumCoursesDesiredResource.class.getName()).log(Level.SEVERE, null, ex);
-    		return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).build();
+    		return Response.serverError().status(Response.Status.NOT_FOUND).type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
     	}
     }
 
