@@ -15,23 +15,26 @@ public class Studenttable  implements java.io.Serializable {
      private boolean ta;
      private int creditHoursCompleted;
      private String takenCourses;
+     private String email;
 
     public Studenttable() {
     }
 
 	
-    public Studenttable(String name, String password, boolean ta, int creditHoursCompleted) {
+    public Studenttable(String name, String password, boolean ta, int creditHoursCompleted, String email) {
         this.name = name;
         this.password = password;
         this.ta = ta;
         this.creditHoursCompleted = creditHoursCompleted;
+        this.email = email;
     }
-    public Studenttable(String name, String password, boolean ta, int creditHoursCompleted, String takenCourses) {
+    public Studenttable(String name, String password, boolean ta, int creditHoursCompleted, String takenCourses, String email) {
        this.name = name;
        this.password = password;
        this.ta = ta;
        this.creditHoursCompleted = creditHoursCompleted;
        this.takenCourses = takenCourses;
+       this.email = email;
     }
    
     public Integer getId() {
@@ -76,6 +79,16 @@ public class Studenttable  implements java.io.Serializable {
     public void setTakenCourses(String takenCourses) {
         this.takenCourses = takenCourses;
     }
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 
 

@@ -521,13 +521,14 @@ public class InteractionLayer {
      * @param name student name
      * @param password student password
      */
-    public void addNewStudent(String name, String password) {
+    public void addNewStudent(String name, String password, String email) {
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
         StudenttableHome sth = new StudenttableHome();
         Studenttable student = new Studenttable();
         student.setName(name);
         student.setPassword(password);
+        student.setEmail(email);        
         sth.persist(student);
         log.info(student);
         transaction.commit();
@@ -605,32 +606,30 @@ public class InteractionLayer {
      * @param courseCode courseCode
      * @return list of studentIds for tas
      */
-    public List<Integer> getAllTasForCourse(String courseCode) throws NullPointerException{
+    public List<Studenttable> getAllTasForCourse(String courseCode) throws NullPointerException{
         List<Integer> taList = new ArrayList<Integer>();
+        List<Studenttable> stList = new ArrayList<Studenttable>();
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
         List<Tacourseassignmenttable> tcat = s.createCriteria(Tacourseassignmenttable.class).add(Restrictions.like("courseCode", courseCode)).list();
         for (Tacourseassignmenttable t : tcat) {
-            taList.add(t.getId().getStudentId());
+            //taList.add(t.getId().getStudentId());
+            stList.add(getStudent(t.getId().getStudentId()));
         }
         transaction.rollback();
-        return taList;
+        return stList;
     }
 
     /**
      * returns list of all student TAs
      * @return 
      */
-    public List<Integer> getAllTas() {
-        List<Integer> taList = new ArrayList<Integer>();
+    public List<Studenttable> getAllTas() {
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
         List<Studenttable> allResults = s.createCriteria(Studenttable.class).add(Restrictions.like("ta", true)).list();
-        for (Studenttable c : allResults) {
-            taList.add(c.getId());
-        }
         transaction.rollback();
-        return taList;
+        return allResults;
 
     }
 
