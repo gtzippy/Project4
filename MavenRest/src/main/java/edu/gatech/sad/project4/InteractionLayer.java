@@ -594,7 +594,7 @@ public class InteractionLayer {
     public Processingstatustable getLatestCompleteProcessingstatustableEntry() {
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
-        List<Processingstatustable> pstList = s.createCriteria(Processingstatustable.class).add(Restrictions.like("completed", 1)).list();
+        List<Processingstatustable> pstList = s.createCriteria(Processingstatustable.class).add(Restrictions.like("completed", true)).list();
         if(pstList.isEmpty()){
         	return null;
         }
