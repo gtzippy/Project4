@@ -635,6 +635,25 @@ public class InteractionLayer {
         return allResults;
 
     }
+    
+    public Studentcourseassignmenttable getStudentcourseassignmenttable(int processingStatusId, int studentId){
+    	Session s = sess.getCurrentSession();
+    	Transaction transaction = s.beginTransaction();
+    	List<Studentcourseassignmenttable> allResults = s.createCriteria(Studentcourseassignmenttable.class).add(Restrictions.like("processingStatusId", processingStatusId)).list();
+    	transaction.rollback();
+    	if(allResults.get(0).getId().getStudentId() != studentId){
+    		return null;
+    	}
+    	return allResults.get(0);
+    }
+    
+    public List<Studentcourseassignmenttable> getAllStudentcourseassignmenttable(int studentId){
+    	Session s = sess.getCurrentSession();
+    	Transaction transaction = s.beginTransaction();
+    	List<Studentcourseassignmenttable> allResults = s.createCriteria(Studentcourseassignmenttable.class).add(Restrictions.like("studentId", studentId)).list();
+    	transaction.rollback();
+    	return allResults;
+    }
 
     /**
      * convert a comma separated string to a list of string

@@ -5,31 +5,31 @@
  */
 package edu.gatech.sad.project4.Resources;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.gatech.sad.project4.InteractionLayer;
-import static edu.gatech.sad.project4.Resources.ResourceBase.mapper;
-import edu.gatech.sad.project4.entities.Professorstable;
-import edu.gatech.sad.project4.entities.Studenttable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import edu.gatech.sad.project4.entities.Studentcourseassignmenttable;
 
 /**
  * REST Web Service
  *
  * @author smithda
  */
-@Path("/GetStudent")
-public class GetStudentResource extends ResourceBase{
+@Path("/GetStudentCourseAssignment")
+public class GetStudentCourseAssignment extends ResourceBase{
 
     @Context
     private UriInfo context;
@@ -37,7 +37,7 @@ public class GetStudentResource extends ResourceBase{
     /**
      * Creates a new instance of GetStudentResource
      */
-    public GetStudentResource() {
+    public GetStudentCourseAssignment() {
     }
 
     /**
@@ -46,15 +46,13 @@ public class GetStudentResource extends ResourceBase{
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id}")
-    public Response getJson(@PathParam("id") int id) {
-        String studentString = null;
-        //int intId = Integer.parseInt(id);
-        try {
-            Studenttable st = iLayer.getStudent(id);
+    @Path("{studentId}/{processingStatusId}")
+    public Response getJson(@PathParam("studentId") int studentId, @PathParam("processingStatusId") int processingStatusId) {
+      try {
+            Studentcourseassignmenttable st = iLayer.getStudentcourseassignmenttable(processingStatusId, studentId);
             return Response.ok(mapper.writeValueAsString(st)).header("Access-Control-Allow-Origin", "*").build();
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(GetStudentResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GetStudentCourseAssignment.class.getName()).log(Level.SEVERE, null, ex);
             return Response.noContent().type(ex.getMessage()).header("Access-Control-Allow-Origin", "*").build();
         }
     }
