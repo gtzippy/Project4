@@ -595,6 +595,9 @@ public class InteractionLayer {
         Session s = sess.getCurrentSession();
         Transaction transaction = s.beginTransaction();
         List<Processingstatustable> pstList = s.createCriteria(Processingstatustable.class).add(Restrictions.like("completed", 1)).list();
+        if(pstList.isEmpty()){
+        	return null;
+        }
         Processingstatustable pst = pstList.get(pstList.size() + 1);
         transaction.rollback();
         return pst;
