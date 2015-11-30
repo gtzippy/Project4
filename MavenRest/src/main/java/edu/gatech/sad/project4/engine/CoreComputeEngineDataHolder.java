@@ -22,7 +22,7 @@ import edu.gatech.sad.project4.entities.Studentpreferencestable;
 import edu.gatech.sad.project4.entities.Studenttable;
 
 public class CoreComputeEngineDataHolder {
-	private static final Log log = LogFactory.getLog(CoreComputeEngineStub.class);
+	private static final Log log = LogFactory.getLog(CoreComputeEngineDataHolder.class);
 
 	// Course related data
 	private Coursetable[] courses = new Coursetable[0];
