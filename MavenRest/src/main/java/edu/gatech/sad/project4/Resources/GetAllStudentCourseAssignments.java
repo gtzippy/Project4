@@ -29,7 +29,7 @@ import edu.gatech.sad.project4.entities.Studentcourseassignmenttable;
  *
  * @author smithda
  */
-@Path("/GetStudentCourseAssignment")
+@Path("/GetAllStudentCourseAssignments")
 public class GetAllStudentCourseAssignments extends ResourceBase{
 
     @Context
