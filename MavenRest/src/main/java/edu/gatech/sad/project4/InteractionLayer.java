@@ -661,7 +661,13 @@ public class InteractionLayer {
     	return allResults;
     }
     
-    
+    public List<Studenttable> getAllStudents(){
+    	Session s = sess.getCurrentSession();
+    	Transaction transaction = s.beginTransaction();
+    	List<Studenttable> allResults = s.createCriteria(Studenttable.class).list();
+    	transaction.rollback();
+    	return allResults;
+    }
 
     /**
      * convert a comma separated string to a list of string
