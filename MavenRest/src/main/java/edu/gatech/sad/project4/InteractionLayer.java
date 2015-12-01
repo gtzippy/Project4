@@ -253,6 +253,7 @@ public class InteractionLayer {
         student.setCourses(courses);
         student.setNumCoursesDesired(numCoursesDesired);
         student.setStudentId(studentId);
+        spsHome.persist(student);
         transaction.commit();
         engineCall();
     }
