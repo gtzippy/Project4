@@ -65,6 +65,7 @@ public class ApplicationConfig extends Application {
         resources.add(edu.gatech.sad.project4.Resources.GetStudentCourseAssignment.class);
         resources.add(edu.gatech.sad.project4.Resources.GetAllStudentCourseAssignments.class);
         resources.add(edu.gatech.sad.project4.Resources.GetAllStudentsResource.class);
+        resources.add(edu.gatech.sad.project4.Resources.AdministratorLoginResource.class);
     }
     
 }
