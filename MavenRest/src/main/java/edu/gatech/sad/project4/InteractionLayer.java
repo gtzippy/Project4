@@ -18,12 +18,14 @@ import edu.gatech.sad.project4.entities.Offeredcoursestable;
 import edu.gatech.sad.project4.entities.Processingstatustable;
 import edu.gatech.sad.project4.entities.Professorstable;
 import edu.gatech.sad.project4.entities.Studentcourseassignmenttable;
+import edu.gatech.sad.project4.entities.StudentcourseassignmenttableId;
 import edu.gatech.sad.project4.entities.Studentpreferencestable;
 import edu.gatech.sad.project4.entities.Studenttable;
 import edu.gatech.sad.project4.entities.Tacourseassignmenttable;
 import edu.gatech.sad.project4.hometables.AdministratortableHome;
 import edu.gatech.sad.project4.hometables.CoursetableHome;
 import edu.gatech.sad.project4.hometables.ProfessorstableHome;
+import edu.gatech.sad.project4.hometables.StudentcourseassignmenttableHome;
 import edu.gatech.sad.project4.hometables.StudentpreferencestableHome;
 import edu.gatech.sad.project4.hometables.StudenttableHome;
 
@@ -639,21 +641,27 @@ public class InteractionLayer {
     public Studentcourseassignmenttable getStudentcourseassignmenttable(int processingStatusId, int studentId){
     	Session s = sess.getCurrentSession();
     	Transaction transaction = s.beginTransaction();
-    	List<Studentcourseassignmenttable> allResults = s.createCriteria(Studentcourseassignmenttable.class).add(Restrictions.like("processingStatusId", processingStatusId)).list();
+    	StudentcourseassignmenttableHome scth = new StudentcourseassignmenttableHome();
+    	StudentcourseassignmenttableId idTableObject = new StudentcourseassignmenttableId();
+    	idTableObject.setProcessingStatusId(processingStatusId);
+    	idTableObject.setStudentId(studentId);
+    	Studentcourseassignmenttable result = scth.findById(idTableObject);
     	transaction.rollback();
-    	if(allResults.get(0).getId().getStudentId() != studentId){
+    	if(result.getId().getStudentId() != studentId){
     		return null;
     	}
-    	return allResults.get(0);
+    	return result;
     }
     
     public List<Studentcourseassignmenttable> getAllStudentcourseassignmenttable(int studentId){
     	Session s = sess.getCurrentSession();
     	Transaction transaction = s.beginTransaction();
-    	List<Studentcourseassignmenttable> allResults = s.createCriteria(Studentcourseassignmenttable.class).add(Restrictions.like("studentId", studentId)).list();
+    	List<Studentcourseassignmenttable> allResults = s.createCriteria(Studentcourseassignmenttable.class).add(Restrictions.like("id.studentId", studentId)).list();
     	transaction.rollback();
     	return allResults;
     }
+    
+    
 
     /**
      * convert a comma separated string to a list of string
